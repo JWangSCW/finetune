@@ -1,5 +1,7 @@
 # Scaleway Agent - Fine-Tuned Mistral 7B with LoRA
+
 This repository contains a fine-tuned version of [`mistralai/Mistral-7B-Instruct-v0.3`](https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3) using **LoRA** adapters for the task of generating **Scaleway CLI and Terraform commands** from natural language instructions. This model has been trained on 1000 examples describing cloud infrastructure tasks (e.g., "Create a bucket in region fr-par").
+
 ---
 
 ## Why This Project?

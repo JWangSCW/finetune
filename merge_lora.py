@@ -2,18 +2,25 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from peft import PeftModel
 import torch
 
-# Base + adapter paths
-base_model = "JQXavier/scaleway-agent"
+# Path to the base model and LoRA adapter
+base_model = "JQXavier/scaleway-agent" # or "Mistral-7B-Instruct" if you want to use the original model
+# revision = "13c7d575e52205157085cffb9a7c5de260a8a650"  # Uncomment if you want to use a specific branch/commit
 adapter_path = "mistral_lora_output/final_checkpoint"
 merged_model_path = "mistral_lora_merged"
 
-# Load base model and LoRA adapter, merge them
-model = AutoModelForCausalLM.from_pretrained(base_model, torch_dtype=torch.bfloat16)
+# Load the base model and LoRA adapter
+model = AutoModelForCausalLM.from_pretrained(base_model, torch_dtype=torch.bfloat16) # Add revision=revision if needed
 model = PeftModel.from_pretrained(model, adapter_path)
-model = model.merge_and_unload()
-model.save_pretrained(merged_model_path)
 
-# Save tokenizer
-tokenizer = AutoTokenizer.from_pretrained(base_model)
+# Move model to bfloat16 explicitly (just to be sure that we are not using float32, need to explicitly set it)
+model = model.to(torch.bfloat16)
+
+# Without safe_serialization=False, it will save in float32, then you will see .safetensors rather than Pytorch_model.bin which is not what we want
+# Especially when you import the model in Scaleway Managed Inference, it will show 32bit rather than bf16 as quantization
+model.save_pretrained(merged_model_path,  safe_serialization=False) 
+
+# Save the tokenizer
+# Load the tokenizer from the base model and save it to the merged model path
+tokenizer = AutoTokenizer.from_pretrained(base_model) # Add revision=revision if needed
 tokenizer.save_pretrained(merged_model_path)
 

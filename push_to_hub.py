@@ -1,50 +1,20 @@
-#!/usr/bin/env python3
-# """
-# push_to_hub.py
-# Push the fine-tuned model to Hugging Face Hub securely.
-# """
-# from huggingface_hub import HfApi, HfFolder
-# from transformers import AutoTokenizer
-
-# # Load tokenizer from base model to save it
-# model_id = "mistralai/Mistral-7B-Instruct-v0.3"
-# tokenizer = AutoTokenizer.from_pretrained(model_id)
-
-
-
-# # Define repository and model path
-# repo_id = "JQXavier/scaleway-agent"
-# model_dir = "mistral_lora_merged"
-
-# # Ensure you have your HF token (environment variable or login)
-# token = HfFolder.get_token()
-# if not token:
-#     raise ValueError("Hugging Face token not found. Set HF_TOKEN or use `huggingface-cli login`.")
-
-# api = HfApi()
-# # Create the repo if it doesn't exist (private by default)
-# api.create_repo(repo_id=repo_id, token=token, exist_ok=True)
-# # Save tokenizer (important for future use or upload)
-# tokenizer.save_pretrained("mistral_lora_merged")
-
-# # Upload all files in model_dir to the repo (transformers files: config, pytorch_model.bin or safetensors, tokenizer, etc.)
-# api.upload_folder(
-#     repo_id=repo_id,
-#     folder_path=model_dir,
-#     path_in_repo="", 
-#     token=token
-# )
-# print(f"Pushed the model to https://huggingface.co/{repo_id}")
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from huggingface_hub import HfApi
 
 local_model_dir = "mistral_lora_merged"
-repo_name = "JQXavier/scaleway-agent"
+repo_id = "JQXavier/scaleway-agent"
+branch_name = "main"  # Attention: HuggingFace does't support pull request as in Github, you cannot merge from "xx" to "main" directly
+
+# Create the branch if it doesn't exist
+# api = HfApi()
+# branches = api.list_repo_refs(repo_id=repo_id).branches
+# branch_names = [branch.name for branch in branches]
+# if branch_name not in branch_names:
+#     api.create_branch(repo_id=repo_id, branch=branch_name)
 
 model = AutoModelForCausalLM.from_pretrained(local_model_dir)
 tokenizer = AutoTokenizer.from_pretrained(local_model_dir)
 
-model.push_to_hub(repo_name)
-tokenizer.push_to_hub(repo_name)
-
-print(f"Model and tokenizer pushed to: https://huggingface.co/{repo_name}")
+model.push_to_hub(repo_id,commit_message="Pushing clean v1 model", revision=branch_name) 
+tokenizer.push_to_hub(repo_id, commit_message="Pushing clean v1 model",revision=branch_name) 
+print(f"Model and tokenizer pushed to: https://huggingface.co/{repo_id}/tree/{branch_name}")

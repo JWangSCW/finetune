@@ -124,14 +124,31 @@ Despite this, hallucinations may occur — especially for deprecated fields or o
 
 ### Limitation of Scaleway's BYOM (beta version) regarding PyTorch .bin shards
 
-- We can import both `.safetensors` shards and PyTorch `.bin` shards. However, since .bin does not explicitly store metadata, you cannot detect if the model is quantized from the file itself.
-- Managed Inference fully supports models with `.safetensors` shards. When attempting to deploy models saved in `.bin` format, you may not find any compatible GPU offer.The Managed Inference team has confirmed they will investigate the format differences, and plan to improve the import experience: if a model format is unsupported, the platform will block the upload upfront to avoid confusion.
+- We can import both *.safetensors* shards and PyTorch *.bin* shards. However, since .bin does not explicitly store metadata, you cannot detect if the model is quantized from the file itself.
+- Managed Inference fully supports models with *.safetensors* shards. When attempting to deploy models saved in *.bin* format, you may not find any compatible GPU offer.The Managed Inference team has confirmed they will investigate the format differences, and plan to improve the import experience: if a model format is unsupported, the platform will block the upload upfront to avoid confusion.
+
+### Save LoRA adaptor in frozen model in .safetensor or in .bin
+
 - If you want to know why we save the same model in different format:
-Both formats are used to **save and load model weights** in PyTorch. `.bin` is the default format when you call `model.save_pretrained()` in Hugging Face Transformers (if you don’t specify `safe_serialization=True`).
+Both formats are used to **save and load model weights** in PyTorch. 
+- *.safetensor* is the default format when you call `model.save_pretrained()` in Hugging Face Transformers, you will see the saved shards such as:
+```
+model-00001-of-00003.safetensors
+model-00002-of-00003.safetensors
+model-00003-of-00003.safetensors
+model.safetensors.index.json
+```
+- Otherwise you need to add `safe_serialization=False`. You will see shards saved in *.bin*, for example:
+```
+pytorch_model-00001-of-00003.bin
+pytorch_model-00002-of-00003.bin
+pytorch_model-00003-of-00003.bin
+pytorch_model.bin.index.json
+```
 
 The key differences:
 
-|         Format         |                      `.safetensors`                   |              `.bin` (PyTorch default)            |
+|         Format         |                      *.safetensors*                   |              *.bin* (PyTorch default)            |
 |------------------------|-------------------------------------------------------|--------------------------------------------------|
 | Safety                 | Secure, prevents arbitrary code execution             | Standard, no extra safety                        |
 | Speed                  | Faster loading                                        | Slightly slower on large models                  |
@@ -140,6 +157,20 @@ The key differences:
 | Ecosystem              | Supported by Hugging Face `transformers`, `diffusers` | Native in PyTorch                                |
 | File extension         | `model.safetensors`                                   | `pytorch_model.bin`                              |
 
-### 
+
+### Upload fine-tuned model in .safetensor or in .bin
+
+When you use `AutoModelForCausalLM.from_pretrained().push_to_hub()`, it internally calls `AutoModelForCausalLM.from_pretrained().save_pretrained()` without specifying the *safe_serialization* parameter. By default, *safe_serialization* is set to True, which means the model is saved in the *.safetensors* format.
+If you want to save and upload your model in the *.bin* format, you need to explicitly set `safe_serialization=False` when calling `save_pretrained()`. However, `push_to_hub()` doesn't provide a direct way to pass this parameter. Therefore, to upload a model in *.bin* format, you should first save the model locally with `safe_serialization=False` and then use `upload_folder()` to upload the saved files to the Hugging Face Hub.
 
 ---
+
+# Some interesting articles
+
+- *[LoRA and PEFT: Fine-Tuning Large Language Models in a Cost-Effective Way]*(https://medium.com/@camillanawaz/lora-and-peft-fine-tuning-large-language-models-in-a-cost-effective-way-2340f88c77a5)
+- *[Fine-Tuning Large Language Models with PEFT (LoRA) and Rouge Score: A Comprehensive Hands-On Guide]*(https://bobrupakroy.medium.com/fine-tuning-large-language-models-with-peft-lora-and-rogue-score-a-comprehensive-hands-on-guide-3d54179125f0)
+- *[LoRA and PEFT: Fine-Tuning Large Language Models in a Cost-Effective Way]*(https://ai.plainenglish.io/understanding-low-rank-adaptation-lora-for-efficient-fine-tuning-of-large-language-models-082d223bb6db)
+- *[LoRA: Low-Rank Adaptation of Large Language Models]*(https://arxiv.org/abs/2106.09685)
+- *[Hugging Face Transformers Documentation]*(https://huggingface.co/docs/transformers/en/main_classes/model)
+- *[How to fine-tune: Focus on effective datasets]*(https://ai.meta.com/blog/how-to-fine-tune-llms-peft-dataset-curation/)
+

@@ -15,9 +15,8 @@ model = PeftModel.from_pretrained(model, adapter_path)
 # Move model to bfloat16 explicitly (just to be sure that we are not using float32, need to explicitly set it)
 model = model.to(torch.bfloat16)
 
-# Without safe_serialization=False, it will save in float32, then you will see .safetensors rather than Pytorch_model.bin which is not what we want
-# Especially when you import the model in Scaleway Managed Inference, it will show 32bit rather than bf16 as quantization
-model.save_pretrained(merged_model_path,  safe_serialization=False) 
+# Merge LoRA weights into the base model
+model.save_pretrained(merged_model_path) # If you need save the model in PyTorch (.bin), you can add safe_serialization=False
 
 # Save the tokenizer
 # Load the tokenizer from the base model and save it to the merged model path

@@ -167,10 +167,10 @@ If you want to save and upload your model in the *.bin* format, you need to expl
 
 # Some interesting articles
 
-- *[LoRA and PEFT: Fine-Tuning Large Language Models in a Cost-Effective Way]*(https://medium.com/@camillanawaz/lora-and-peft-fine-tuning-large-language-models-in-a-cost-effective-way-2340f88c77a5)
-- *[Fine-Tuning Large Language Models with PEFT (LoRA) and Rouge Score: A Comprehensive Hands-On Guide]*(https://bobrupakroy.medium.com/fine-tuning-large-language-models-with-peft-lora-and-rogue-score-a-comprehensive-hands-on-guide-3d54179125f0)
-- *[LoRA and PEFT: Fine-Tuning Large Language Models in a Cost-Effective Way]*(https://ai.plainenglish.io/understanding-low-rank-adaptation-lora-for-efficient-fine-tuning-of-large-language-models-082d223bb6db)
-- *[LoRA: Low-Rank Adaptation of Large Language Models]*(https://arxiv.org/abs/2106.09685)
-- *[Hugging Face Transformers Documentation]*(https://huggingface.co/docs/transformers/en/main_classes/model)
-- *[How to fine-tune: Focus on effective datasets]*(https://ai.meta.com/blog/how-to-fine-tune-llms-peft-dataset-curation/)
+- [LoRA and PEFT: Fine-Tuning Large Language Models in a Cost-Effective Way](https://medium.com/@camillanawaz/lora-and-peft-fine-tuning-large-language-models-in-a-cost-effective-way-2340f88c77a5)
+- [Fine-Tuning Large Language Models with PEFT (LoRA) and Rouge Score: A Comprehensive Hands-On Guide](https://bobrupakroy.medium.com/fine-tuning-large-language-models-with-peft-lora-and-rogue-score-a-comprehensive-hands-on-guide-3d54179125f0)
+- [LoRA and PEFT: Fine-Tuning Large Language Models in a Cost-Effective Way](https://ai.plainenglish.io/understanding-low-rank-adaptation-lora-for-efficient-fine-tuning-of-large-language-models-082d223bb6db)
+- [LoRA: Low-Rank Adaptation of Large Language Models](https://arxiv.org/abs/2106.09685)
+- [Hugging Face Transformers Documentation](https://huggingface.co/docs/transformers/en/main_classes/model)
+- [How to fine-tune: Focus on effective datasets](https://ai.meta.com/blog/how-to-fine-tune-llms-peft-dataset-curation/)
 

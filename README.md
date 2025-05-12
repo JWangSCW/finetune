@@ -6,19 +6,7 @@ This repository contains a fine-tuned version of [`mistralai/Mistral-7B-Instruct
 
 ## Why This Project?
 
-Cloud infrastructure is complex. This project enables an **AI assistant to generate Scaleway infrastructure code (CLI + Terraform)** from a simple prompt like:
-
-```
-Create a virtual instance named resource-42 with image ubuntu-focal and type GP1-M in zone fr-par-1
-```
-
-Result:
-
-```
-CLI: scw rdb instance create ...
-Terraform:
-resource "scaleway_rdb_instance" ...
-```
+Cloud infrastructure is complex. Finding the correct command line often requires searching through multiple websites. This project provides an AI assistant capable of generating Scaleway infrastructure code (CLI + Terraform) directly from a simple prompt.
 ---
 
 ## How It Works
@@ -27,8 +15,8 @@ resource "scaleway_rdb_instance" ...
 
 - Scaleway account & API key & SSH key
 - [HuggingFace account, personal token, model repository](https://huggingface.co/docs/huggingface_hub/quick-start)
-- Scaleway VPC, Private Network(optional), GPU Instance (starting from Nvidia L4)+ BlockStorage, PGW (optional) or Flexible IP to access in GPU instance to fine-tune model
-- Scaleway Managed Inference instance to inferent model through public endpoint or private endpoint, using BYOM (Bring your own model) to import the post-finetuned model from HuggingFace
+- Scaleway VPC, Private Network(optional), GPU Instance (starting from L4)+ BlockStorage, PGW (optional) or Flexible IP to access in GPU instance to fine-tune model through Internet
+- Scaleway Managed Inference to inferent model through public endpoint or private endpoint, using BYOM (Bring your own model) to import the post-finetuned model from HuggingFace
 
 ### 1. **Install dependencies (`setup.sh`)**
 

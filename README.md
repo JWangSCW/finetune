@@ -7,6 +7,7 @@ This repository contains a fine-tuned version of [`mistralai/Mistral-7B-Instruct
 ## Why This Project?
 
 Cloud infrastructure is complex. Finding the correct command line often requires searching through multiple websites. This project provides an AI assistant capable of generating Scaleway infrastructure code (CLI + Terraform) directly from a simple prompt.
+
 ---
 
 ## How It Works

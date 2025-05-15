@@ -2,7 +2,7 @@
 set -e
 
 echo "Checking system packages"
-required_pkgs=(python3-venv python3-full)
+required_pkgs=(python3-venv python3-full git-lfs)
 need_update=false
 for pkg in "${required_pkgs[@]}"; do
     if ! dpkg-query -W -f='${Status}' "$pkg" 2>/dev/null | grep -q "install ok installed"; then
@@ -17,7 +17,18 @@ if [ "$need_update" = true ]; then
     sudo apt-get install -y "${required_pkgs[@]}"
 else
     echo "All required system packages are already installed."
+
+
+echo "Installing and configuring Git LFS"
+git lfs install
+
+echo "Make Git LFS track *.safetensors files"
+if [ -d ".git" ]; then
+    git lfs track "*.safetensors"
+    git add .gitattributes
+    echo "Git LFS tracking rule added for *.safetensors"
 fi
+
 
 echo "Setting up Python virtual environment"
 VENV_DIR="$HOME/finetune-venv"

@@ -137,11 +137,11 @@ resource "kubermatic_cluster" "demo-kapsule" {
 ## Option2. Through Curl POST, after import the model into Scaleway Managed Inference
 
 ```bash
-curl -X POST https://<YOUR_INFERENCE_ENDPOINT_URL>/v1/completions \
+curl -X POST <YOUR_INFERENCE_ENDPOINT_URL>/v1/completions \
   -H "Authorization: Bearer <YOUR_API_KEY>" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "scaleway-agent-v1",
+    "model": "scaleway-agent-v1",    # The name of your imported model
     "prompt": "### Instruction:\nCreate a virtual instance named demo with image ubuntu and type GP1-L in zone fr-par-2, in the private network xyz.\n\n### Response:\n",
     "max_tokens": 300,
     "temperature": 0.0
